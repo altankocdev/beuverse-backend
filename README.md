@@ -277,11 +277,19 @@ Production configuration is handled via environment variables — no secrets in 
 
 ## Related
 
-- **Android Client** → [beuverse-android](https://github.com/altankocdev/beuverse)
+- **Android Client** → [beuverse-android-app](https://github.com/altankocdev/beuverse-android-app)
 
 ---
 
-## Author
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-**Altan Koç** — Software Engineer
-[GitHub](https://github.com/altankocdev)
+## 👨‍💻 Developer
+**Altan Koç**
+* GitHub: [@altankocdev](https://github.com/altankocdev)
+
+---
+⭐ **If you found this project helpful, please give it a star!** ⭐
+
+---
+*Built with ❤️ using Java and Spring Boot*
