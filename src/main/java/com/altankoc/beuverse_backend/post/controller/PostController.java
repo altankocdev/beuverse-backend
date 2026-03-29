@@ -1,5 +1,6 @@
 package com.altankoc.beuverse_backend.post.controller;
 
+import com.altankoc.beuverse_backend.core.s3.S3Service;
 import com.altankoc.beuverse_backend.core.security.SecurityUtils;
 import com.altankoc.beuverse_backend.enums.PostTag;
 import com.altankoc.beuverse_backend.post.dto.PostRequestDTO;
@@ -11,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -18,11 +22,24 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     private final PostService postService;
+    private final S3Service s3Service;
 
     @PostMapping
     public ResponseEntity<PostResponseDTO> createPost(@Valid @RequestBody PostRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postService.createPost(SecurityUtils.getCurrentStudentId(), dto));
+    }
+
+    @PostMapping("/upload-images")
+    public ResponseEntity<List<String>> uploadImages(
+            @RequestParam("files") List<MultipartFile> files) {
+        if (files.size() > 4) {
+            throw new com.altankoc.beuverse_backend.core.exception.BusinessException("En fazla 4 görsel yüklenebilir!");
+        }
+        List<String> urls = files.stream()
+                .map(file -> s3Service.uploadFile(file, "posts"))
+                .toList();
+        return ResponseEntity.ok(urls);
     }
 
     @GetMapping("/{id}")

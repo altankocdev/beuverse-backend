@@ -3,9 +3,10 @@ package com.altankoc.beuverse_backend.auth.service;
 import com.altankoc.beuverse_backend.auth.dto.LoginRequestDTO;
 import com.altankoc.beuverse_backend.auth.dto.LoginResponseDTO;
 import com.altankoc.beuverse_backend.auth.dto.RegisterRequestDTO;
-import com.altankoc.beuverse_backend.core.security.JwtService;
+import com.altankoc.beuverse_backend.core.email.EmailService;
 import com.altankoc.beuverse_backend.core.exception.BusinessException;
 import com.altankoc.beuverse_backend.core.exception.ResourceNotFoundException;
+import com.altankoc.beuverse_backend.core.security.JwtService;
 import com.altankoc.beuverse_backend.student.dto.StudentResponseDTO;
 import com.altankoc.beuverse_backend.student.entity.Student;
 import com.altankoc.beuverse_backend.student.mapper.StudentMapper;
@@ -25,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final StudentMapper studentMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final EmailService emailService;
 
     @Override
     @Transactional
@@ -38,9 +40,18 @@ public class AuthServiceImpl implements AuthService {
 
         Student student = studentMapper.toEntity(dto);
         student.setPassword(passwordEncoder.encode(dto.password()));
-        student.setEmailVerified(true);
+        student.setEmailVerified(false);
+        student.setEmailVerificationToken(UUID.randomUUID().toString());
 
-        return studentMapper.toResponseDTO(studentRepository.save(student));
+        Student saved = studentRepository.save(student);
+
+        emailService.sendVerificationEmail(
+                saved.getEmail(),
+                saved.getFirstName(),
+                saved.getEmailVerificationToken()
+        );
+
+        return studentMapper.toResponseDTO(saved);
     }
 
     @Override

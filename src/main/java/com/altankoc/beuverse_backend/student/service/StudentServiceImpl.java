@@ -105,4 +105,13 @@ public class StudentServiceImpl implements StudentService {
                         keyword, keyword, keyword, pageable)
                 .map(studentMapper::toResponseDTO);
     }
+
+    @Override
+    @Transactional
+    public StudentResponseDTO updateProfilePhoto(Long id, String photoUrl) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Öğrenci bulunamadı!"));
+        student.setProfilePhotoUrl(photoUrl);
+        return studentMapper.toResponseDTO(studentRepository.save(student));
+    }
 }

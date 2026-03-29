@@ -1,5 +1,6 @@
 package com.altankoc.beuverse_backend.student.controller;
 
+import com.altankoc.beuverse_backend.core.s3.S3Service;
 import com.altankoc.beuverse_backend.core.security.SecurityUtils;
 import com.altankoc.beuverse_backend.student.dto.StudentResponseDTO;
 import com.altankoc.beuverse_backend.student.dto.StudentSummaryDTO;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,6 +21,7 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+    private final S3Service s3Service;
 
     @GetMapping
     public ResponseEntity<Page<StudentResponseDTO>> getAllStudents(
@@ -45,6 +48,12 @@ public class StudentController {
     @PutMapping("/me")
     public ResponseEntity<StudentResponseDTO> updateMe(@Valid @RequestBody StudentUpdateDTO dto) {
         return ResponseEntity.ok(studentService.updateStudent(SecurityUtils.getCurrentStudentId(), dto));
+    }
+
+    @PutMapping("/me/profile-photo")
+    public ResponseEntity<StudentResponseDTO> uploadProfilePhoto(@RequestParam("file") MultipartFile file) {
+        String url = s3Service.uploadFile(file, "profiles");
+        return ResponseEntity.ok(studentService.updateProfilePhoto(SecurityUtils.getCurrentStudentId(), url));
     }
 
     @DeleteMapping("/me")

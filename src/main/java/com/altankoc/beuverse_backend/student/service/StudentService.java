@@ -13,6 +13,7 @@ public interface StudentService {
     StudentResponseDTO getStudentById(Long id);
     StudentResponseDTO getStudentByUsername(String username);
     StudentResponseDTO updateStudent(Long id, StudentUpdateDTO dto);
+    StudentResponseDTO updateProfilePhoto(Long id, String photoUrl);
     void deleteStudent(Long id);
     Page<StudentResponseDTO> getAllStudents(int page, int size);
     List<StudentSummaryDTO> getDeletedStudents();
