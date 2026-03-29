@@ -65,7 +65,6 @@ pipeline {
                 sshagent(['app-server-key']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no \
-                            -o ProxyCommand="ssh -i /var/lib/jenkins/.ssh/jump_key -W %h:%p ubuntu@18.198.238.31" \
                             ubuntu@${APP_SERVER_IP} \
                             'bash /home/ubuntu/deploy.sh'
                     """
