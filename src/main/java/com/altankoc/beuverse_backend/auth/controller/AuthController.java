@@ -31,6 +31,36 @@ public class AuthController {
     @GetMapping("/verify-email")
     public ResponseEntity<String> verifyEmail(@RequestParam String token) {
         authService.verifyEmail(token);
-        return ResponseEntity.ok("E-posta adresiniz başarıyla doğrulandı!");
+        String html = """
+            <!DOCTYPE html>
+            <html lang="tr">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Beuverse — E-posta Doğrulandı</title>
+                <style>
+                    body { font-family: Arial, sans-serif; display: flex; justify-content: center;
+                           align-items: center; min-height: 100vh; margin: 0;
+                           background-color: #f0f0f8; }
+                    .card { background: white; padding: 48px; border-radius: 16px;
+                            text-align: center; max-width: 480px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
+                    .icon { font-size: 64px; margin-bottom: 24px; }
+                    h1 { color: #27374D; margin-bottom: 12px; font-size: 24px; }
+                    p { color: #526D82; line-height: 1.6; }
+                </style>
+            </head>
+            <body>
+                <div class="card">
+                    <div class="icon">✅</div>
+                    <h1>E-posta Doğrulandı!</h1>
+                    <p>Hesabınız başarıyla aktifleştirildi.<br>
+                    Artık Beuverse uygulamasından giriş yapabilirsiniz.</p>
+                </div>
+            </body>
+            </html>
+            """;
+        return ResponseEntity.ok()
+                .header("Content-Type", "text/html; charset=UTF-8")
+                .body(html);
     }
 }
