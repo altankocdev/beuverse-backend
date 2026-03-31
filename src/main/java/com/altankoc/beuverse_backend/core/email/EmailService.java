@@ -22,7 +22,7 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom("noreply@beuverse.fatihaktas.xyz");
+            helper.setFrom("altancode@gmail.com");
             helper.setTo(toEmail);
             helper.setSubject("Beuverse — E-posta Adresinizi Doğrulayın");
 
