@@ -8,7 +8,7 @@ pipeline {
     environment {
         AWS_REGION    = 'eu-central-1'
         ECR_URI       = '264991295666.dkr.ecr.eu-central-1.amazonaws.com/beuverse-backend'
-        APP_SERVER_IP = '10.0.139.118'
+        APP_SERVER_IP = '10.0.4.141'
     }
 
     stages {
