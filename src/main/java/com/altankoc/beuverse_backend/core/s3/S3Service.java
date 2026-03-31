@@ -39,9 +39,7 @@ public class S3Service {
 
             s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
 
-            String url = "https://" + awsProperties.s3().bucket()
-                    + ".s3." + awsProperties.region()
-                    + ".amazonaws.com/" + fileName;
+            String url = "https://" + awsProperties.cloudfront().domain() + "/" + fileName;
 
             log.info("Dosya yüklendi: {}", url);
             return url;
@@ -59,7 +57,7 @@ public class S3Service {
         }
 
         try {
-            String key = fileUrl.substring(fileUrl.indexOf(".amazonaws.com/") + 15);
+            String key = fileUrl.substring(fileUrl.lastIndexOf("/", fileUrl.lastIndexOf("/") - 1) + 1);
 
             DeleteObjectRequest request = DeleteObjectRequest.builder()
                     .bucket(awsProperties.s3().bucket())

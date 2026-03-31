@@ -23,6 +23,8 @@ aws:
   s3:
     bucket: ${AWS_S3_BUCKET}
   region: ${AWS_REGION}
+  cloudfront:
+    domain: ${CLOUDFRONT_DOMAIN}
 
 management:
   endpoint:
